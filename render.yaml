@@ -1,11 +1,24 @@
 services:
   - type: web
-    name: mini-blog
-    env: php
-    buildCommand: './build.sh'
-    startCommand: 'php artisan serve --host 0.0.0.0 --port 10000'
+    name: laravel-mini-blog
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    autoDeploy: true
     envVars:
       - key: APP_ENV
         value: production
       - key: APP_KEY
         generateValue: true
+      - key: DB_CONNECTION
+        value: mysql
+      - key: DB_HOST
+        value: sql.freedb.tech
+      - key: DB_PORT
+        value: 3306
+      - key: DB_DATABASE
+        value: freedb_mini_blog
+      - key: DB_USERNAME
+        value: freedb_bothien09
+      - key: DB_PASSWORD
+        value: "FB7?n5vyFss&C2u"
