@@ -1,30 +1,32 @@
-FROM php:8.2-apache
+# Dockerfile
 
-# Install system dependencies
+FROM php:8.2-fpm
+
+# Cài extension và các gói cần thiết
 RUN apt-get update && apt-get install -y \
-    git zip unzip libpng-dev libonig-dev libxml2-dev curl npm nodejs
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip \
+    curl \
+    git \
+    npm \
+    nodejs \
+    mysql-client \
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-# Install PHP extensions
-RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd
-
-# Enable Apache Rewrite Module
-RUN a2enmod rewrite
-
-# Copy project files
-COPY . /var/www/html
-
-# Set working directory
-WORKDIR /var/www/html
-
-# Install Composer
+# Cài Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Install dependencies
-RUN composer install --optimize-autoloader --no-dev \
-    && npm install && npm run build \
-    && php artisan config:cache
+WORKDIR /var/www
 
-# Set proper permissions
-RUN chown -R www-data:www-data /var/www/html
+COPY . .
 
-EXPOSE 80
+RUN composer install --no-dev --optimize-autoloader \
+    && php artisan config:cache \
+    && php artisan route:cache \
+    && php artisan view:cache \
+    && npm install && npm run build
+
+CMD php artisan serve --host=0.0.0.0 --port=8080

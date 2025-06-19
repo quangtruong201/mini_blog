@@ -3,13 +3,9 @@ services:
     name: laravel-mini-blog
     env: docker
     plan: free
-    dockerfilePath: ./Dockerfile
-    autoDeploy: true
     envVars:
       - key: APP_ENV
         value: production
-      - key: APP_KEY
-        generateValue: true
       - key: DB_CONNECTION
         value: mysql
       - key: DB_HOST
@@ -21,4 +17,9 @@ services:
       - key: DB_USERNAME
         value: freedb_bothien09
       - key: DB_PASSWORD
-        value: "FB7?n5vyFss&C2u"
+        value: FB7?n5vyFss&C2u
+    dockerfilePath: Dockerfile
+    autoDeploy: true
+    buildFilter:
+      paths:
+        - "**/*"
