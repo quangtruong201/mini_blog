@@ -7,8 +7,7 @@ use App\Http\Controllers\CategoryController;
 
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return 'Hello from Laravel on Render!';});
 
 Route::get('/dashboard', function () {
     return view('dashboard');
